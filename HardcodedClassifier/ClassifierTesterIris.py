@@ -31,6 +31,8 @@ class ClassifierTesterIris:
 
             model = self.train(training_data, training_targets)
             predicted_targets = model.predict(testing_data)
+            if show:
+                print("\nTest ", i + 1)
             self.compare(predicted_targets, testing_targets, show)
         self.summary()
 

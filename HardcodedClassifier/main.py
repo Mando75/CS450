@@ -26,18 +26,25 @@ def test_hardcoded(num_tests=200, verbose=False):
 
 def processArgs():
     parser = argparse.ArgumentParser(description="Run train/test iris model")
-    parser.add_argument('--verbose', help='show verbose accuracy output')
+    parser.add_argument(
+        '--verbose', help='show verbose accuracy output', action="store_true")
     parser.add_argument(
         '--numTests',
         type=int,
         help="specify the number times to retrain and test the model")
+    parser.add_argument(
+        '--gnb', help='run gaussian naive bayes tests', action="store_true")
+    parser.add_argument(
+        '--hcc', help='run hard coded classifier tests', action="store_true")
     return parser.parse_args()
 
 
 def main():
     args = processArgs()
-    test_gaussian_nb(args.numTests, args.verbose)
-    test_hardcoded(args.numTests, args.verbose)
+    if args.gnb:
+        test_gaussian_nb(args.numTests, args.verbose)
+    if args.hcc:
+        test_hardcoded(args.numTests, args.verbose)
 
 
 if __name__ == '__main__':
