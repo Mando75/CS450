@@ -1,6 +1,6 @@
 import argparse
 from sklearn.naive_bayes import GaussianNB
-from ClassifierTesterIris import ClassifierTesterIris
+from common.ClassifierTesterIris import ClassifierTesterIris
 from HardCodedClassifier import HardCodedClassifier
 
 
