@@ -37,41 +37,51 @@ class kdTree:
         Find the nearest value to a given point
     """
 
-    def return_nearest(self, point, depth=0, tree=None):
-        if tree is None:
-            tree = self.tree
+    def return_nearest(self, root, point, depth=0):
+        if root is None:
+            return None
 
-        if tree.left is None:
-            # Leaf
-            distance = np.sum((tree.point - point)**2)
-            return tree.point, distance, 0
+        axis = depth % len(point)
+
+        if point[axis] < root.point[axis]:
+            next_branch = root.left
+            opposite_branch = root.right
         else:
-            # Pick axis to split
-            axis = np.mod(depth, np.shape(point)[0])
+            next_branch = root.right
+            opposite_branch = root.left
 
-            # traverse the tree
-            if point[axis] < tree.point[axis]:
-                best_guess, distance, height = self.return_nearest(
-                    point, depth + 1, tree.left)
-            else:
-                best_guess, distance, height = self.return_nearest(
-                    point, depth + 1, tree.right)
+        best = self.closer_distance(
+            point, self.return_nearest(next_branch, point, depth + 1),
+            root.point)
 
-        if height <= 2:
-            # Check sibling
-            if point[axis] < tree.point[axis]:
-                best_guess_2, distance_2, height_2 = self.return_nearest(
-                    point, depth + 1, tree.right)
-            else:
-                best_guess_2, distance_2, height_2 = self.return_nearest(
-                    point, depth + 1, tree.left)
+        if self.distance(point, best) > abs(point[axis] - root.point[axis]):
+            best = self.closer_distance(
+                point, self.return_nearest(opposite_branch, point, depth + 1),
+                best)
 
-        distance_3 = np.sum((tree.point - point)**2)
-        if distance_3 < distance_2:
-            distance_2 = distance_3
-            best_guess = tree.point
-        if distance_2 < distance:
-            distance = distance_2
-            best_guess = best_guess_2
+        return best
 
-        return best_guess, distance, height + 1
+    def closer_distance(self, pivot, p1, p2):
+        if p1 is None:
+            return p2
+
+        if p2 is None:
+            return p1
+
+        d1 = self.distance(pivot, p1)
+        d2 = self.distance(pivot, p2)
+
+        if d1 < d2:
+            return p1
+        else:
+            return p2
+
+    @staticmethod
+    def distance(p1, p2):
+        x1, y1 = p1
+        x2, y2 = p2
+
+        dx = x1 - x2
+        dy = y1 - y2
+
+        return np.sqrt(dx * dx + dy * dy)

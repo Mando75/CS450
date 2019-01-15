@@ -28,9 +28,9 @@ def processArgs():
 
 
 def main():
-    points = [(2, 3), (5, 4), (9, 6), (4, 7), (8, 1), (7, 2)]
+    points = [[2, 3, 5], [1, 5, 4], [5, 9, 6], [1, 4, 7], [8, 8, 1], [4, 7, 2]]
     kd = kdTree(points)
-    print(kd.tree)
+    print(kd.return_nearest(kd.tree, [4, 2, 1]))
 
 
 if __name__ == '__main__':
