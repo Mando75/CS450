@@ -1,5 +1,6 @@
 from common.ClassifierTesterIris import ClassifierTesterIris
 from kNN.kNNClassifier import kNNClassifier
+from kNN.kdTree import knTree
 import argparse
 
 
@@ -26,8 +27,12 @@ def processArgs():
 
 
 def main():
-    args = processArgs()
-    test_knn(args.numTests, args.verbose)
+    tree = knTree(12)
+    tree.insert(6)
+    tree.insert(5)
+    tree.insert(7)
+    tree.insert(0)
+    tree.printTree()
 
 
 if __name__ == '__main__':
