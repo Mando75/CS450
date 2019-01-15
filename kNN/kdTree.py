@@ -2,10 +2,15 @@ import numpy as np
 
 
 class kdNode:
-    def __init__(self, point, left, right):
+    def __init__(self, point, left, right, depth):
+        self.depth = depth
         self.point = point
         self.left = left
         self.right = right
+
+    def __repr__(self):
+        tab = "\t" * self.depth
+        return f"depth: {self.depth} point{self.point}\n{tab} left: {self.left} \n{tab} right: {self.right}"
 
 
 class kdTree:
@@ -13,25 +18,20 @@ class kdTree:
         self.tree = self.build_tree(points)
 
     def build_tree(self, points, depth=0):
-        n = len(points)
-        if n <= 0:
+        try:
+            k = len(points[0])
+        except IndexError as e:
             return None
 
-        # Pick axis to split
-        axis = np.mod(depth, np.shape(points)[1])
+        axis = depth % k
 
-        # Find the median point
-        indices = np.argsort(points[:, axis])
-        points = points[indices, :]
-        median = int(np.ceil(float(np.shape(points)[0] - 1) / 2))
+        sorted_points = sorted(points, key=lambda point: point[axis])
+        median = len(sorted_points) // 2
 
-        # Separate the remaining points into the sides of the tree
-        left_points = points[:median, :]
-        right_points = points[:median + 1:, :]
-
-        # Create new branch of nodes recursively
-        return kdNode(points[median, :], self.build_tree(
-            left_points, depth + 1), self.build_tree(right_points, depth + 1))
+        return kdNode(sorted_points[median],
+                      self.build_tree(sorted_points[:median], depth + 1),
+                      self.build_tree(sorted_points[median + 1:], depth + 1),
+                      depth)
 
     """
         Find the nearest value to a given point
