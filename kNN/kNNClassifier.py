@@ -21,7 +21,6 @@ class kNNClassifier:
             indices = np.argsort(distances, axis=0)
 
             classes = np.unique(self.targets[indices[:self.k]])
-            print(indices)
             if len(classes) == 1:
                 closest[n] = np.unique(classes)
             else:
