@@ -38,50 +38,38 @@ class kdTree:
     """
 
     def return_nearest(self, root, point, depth=0):
-        if root is None:
-            return None
 
-        axis = depth % len(point)
-
-        if point[axis] < root.point[axis]:
-            next_branch = root.left
-            opposite_branch = root.right
+        if root.right is None:
+            distance = np.sum((root.point - point)**2)
+            return root.point, distance, 0
+        elif root.left is None:
+            distance = np.sum((root.point - point)**2)
+            return root.point, distance, 0
         else:
-            next_branch = root.right
-            opposite_branch = root.left
 
-        best = self.closer_distance(
-            point, self.return_nearest(next_branch, point, depth + 1),
-            root.point)
+            axis = np.mod(depth, np.shape(point)[0])
 
-        if self.distance(point, best) > abs(point[axis] - root.point[axis]):
-            best = self.closer_distance(
-                point, self.return_nearest(opposite_branch, point, depth + 1),
-                best)
+            if point[axis] < root.point[axis]:
+                best, distance, height = self.return_nearest(
+                    root.left, point, depth + 1)
+            else:
+                best, distance, height = self.return_nearest(
+                    root.right, point, depth + 1)
 
-        return best
+        if height <= 2:
+            if point[axis] < root.point[axis]:
+                best2, distance2, height2 = self.return_nearest(
+                    root.right, point, depth + 1)
+            else:
+                best2, distance2, height2 = self.return_nearest(
+                    root.left, point, depth + 1)
 
-    def closer_distance(self, pivot, p1, p2):
-        if p1 is None:
-            return p2
+        distance3 = np.sum((root.point - point)**2)
+        if distance3 < distance2:
+            distance2 = distance3
+            best2 = root.point
+        if distance2 < distance:
+            distance = distance2
+            best = best2
 
-        if p2 is None:
-            return p1
-
-        d1 = self.distance(pivot, p1)
-        d2 = self.distance(pivot, p2)
-
-        if d1 < d2:
-            return p1
-        else:
-            return p2
-
-    @staticmethod
-    def distance(p1, p2):
-        x1, y1 = p1
-        x2, y2 = p2
-
-        dx = x1 - x2
-        dy = y1 - y2
-
-        return np.sqrt(dx * dx + dy * dy)
+        return best, distance, height + 1

@@ -1,7 +1,5 @@
 from common.ClassifierTesterIris import ClassifierTesterIris
 from kNN.kNNClassifier import kNNClassifier
-from kNN.kdTree import kdTree
-import numpy as np
 import argparse
 
 
@@ -28,9 +26,8 @@ def processArgs():
 
 
 def main():
-    points = [[2, 3, 5], [1, 5, 4], [5, 9, 6], [1, 4, 7], [8, 8, 1], [4, 7, 2]]
-    kd = kdTree(points)
-    print(kd.return_nearest(kd.tree, [4, 2, 1]))
+    args = processArgs()
+    test_knn(args.numTests, args.verbose)
 
 
 if __name__ == '__main__':
