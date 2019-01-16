@@ -1,4 +1,5 @@
 import numpy as np
+from kNN.kdTree import kdTree
 
 
 class kNNClassifier:
@@ -8,10 +9,19 @@ class kNNClassifier:
         self.targets = np.array([])
 
     def fit(self, training_data, training_targets):
-        self.data = training_data
-        self.targets = training_targets
+        self.data = [(point, i)
+                     for i, point in enumerate(np.array(training_data))]
+        self.targets = np.array(training_targets)
 
     def predict(self, testing_data):
+        k_tree = kdTree(self.data)
+        predictions = []
+        for point in testing_data:
+            k_nearest = k_tree.return_nearest_k(point, self.k)
+            # TODO -
+        return predictions
+
+    def old_predict(self, testing_data):
         n_inputs = np.shape(testing_data)[0]
         closest = np.zeros(n_inputs)
 
