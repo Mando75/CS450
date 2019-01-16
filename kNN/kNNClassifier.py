@@ -13,12 +13,18 @@ class kNNClassifier:
                      for i, point in enumerate(np.array(training_data))]
         self.targets = np.array(training_targets)
 
-    def predict(self, testing_data):
+    def predict(self, testing_data, average=False):
         k_tree = kdTree(self.data)
         predictions = []
         for point in testing_data:
             k_nearest = k_tree.return_nearest_k(point, self.k)
-            # TODO -
+            targets = [self.targets[n.node[1]] for n in k_nearest]
+            if average:
+                predictions.append(round(np.average(targets)))
+            else:
+                unique, counts = np.unique(targets, return_counts=True)
+                max_index = np.argmax(counts)
+                predictions.append(unique[max_index])
         return predictions
 
     def old_predict(self, testing_data):

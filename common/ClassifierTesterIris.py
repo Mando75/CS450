@@ -44,6 +44,8 @@ class ClassifierTesterIris:
         self.avg_accuracy = round(
             sum(self.accuracies) / len(self.accuracies), 2)
         print("Total Average Accuracy: ", self.avg_accuracy)
+        print("Max Accuracy", max(self.accuracies))
+        print("Min Accuracy", min(self.accuracies))
 
     @staticmethod
     def get_diff(predicted_targets, actual_targets):

@@ -103,9 +103,11 @@ class kdTree:
             if point[axis] < root.point[0][axis]:
                 best2, distance2, height2 = self.return_nearest(
                     root.right, point, depth + 1)
+                self.add_neighbor(best2, distance2, height2)
             else:
                 best2, distance2, height2 = self.return_nearest(
                     root.left, point, depth + 1)
+                self.add_neighbor(best2, distance2, height2)
 
             distance3 = np.sum((root.point[0] - point)**2)
             if distance3 < distance2:
@@ -114,17 +116,17 @@ class kdTree:
             if distance2 < distance:
                 distance = distance2
                 best = best2
-            else:
-                neighbor = kdNeighbor(best2, distance, height + 1)
-                self.heap.add(neighbor)
 
-        neighbor = kdNeighbor(best, distance, height + 1)
-        self.heap.add(neighbor)
+        self.add_neighbor(best, distance, height + 1)
         return best, distance, height + 1
 
     def return_nearest_k(self, point, k):
         self.return_nearest(self.tree, point)
         nearest = []
         for i in range(0, k):
-            nearest.append(self.heap.pop())
+            if i < len(self.heap.heap):
+                nearest.append(self.heap.pop())
         return nearest
+
+    def add_neighbor(self, node, dist, height):
+        self.heap.add(kdNeighbor(node, dist, height))
