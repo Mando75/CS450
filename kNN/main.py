@@ -1,9 +1,16 @@
 from common.ClassifierTesterIris import ClassifierTesterIris
 from kNN.kNNClassifier import kNNClassifier
+from sklearn.neighbors import KNeighborsClassifier
 import argparse
 
 
 def test_knn(num_tests=200, verbose=False, use_tree=False, k=7, average=False):
+    print("----------------------------")
+    print("    TESTING skLearn KNN     ")
+    print("----------------------------")
+    classifier = KNeighborsClassifier(n_neighbors=k)
+    tester = ClassifierTesterIris(classifier)
+    tester.test(num_tests, verbose)
     print("----------------------------")
     print("        TESTING kNN         ")
     print("----------------------------")
