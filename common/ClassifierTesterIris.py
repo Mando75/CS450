@@ -30,7 +30,10 @@ class ClassifierTesterIris:
                 iris.data, iris.target, shuffle=True)
 
             model = self.train(training_data, training_targets)
-            predicted_targets = model.predict(testing_data, average)
+            if average:
+                predicted_targets = model.predict(testing_data, average)
+            else:
+                predicted_targets = model.predict(testing_data)
             if show:
                 print("\nTest ", i + 1)
             self.compare(predicted_targets, testing_targets, show)
