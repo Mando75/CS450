@@ -124,7 +124,10 @@ class kdTree:
         self.kdSetHeap.clear()
         # This method will rebuild the priority set as it traverses
         # the tree
-        self.return_nearest(self.tree, point)
+        closest = self.return_nearest(self.tree, point)
+        if k == 1:
+            return [closest]
+
         nearest = []
         for i in range(0, k):
             if i < len(self.kdSetHeap.heap):

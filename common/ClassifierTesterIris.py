@@ -22,7 +22,7 @@ class ClassifierTesterIris:
             print("DIFF: ", diff)
             print("ACCURACY: ", accuracy)
 
-    def test(self, num_tests=100, show=False):
+    def test(self, num_tests=100, show=False, average=False):
         self.num_tests = num_tests
         iris = datasets.load_iris()
         for i in range(0, num_tests):
@@ -30,7 +30,7 @@ class ClassifierTesterIris:
                 iris.data, iris.target, shuffle=True)
 
             model = self.train(training_data, training_targets)
-            predicted_targets = model.predict(testing_data)
+            predicted_targets = model.predict(testing_data, average)
             if show:
                 print("\nTest ", i + 1)
             self.compare(predicted_targets, testing_targets, show)
