@@ -34,10 +34,15 @@ class kNNClassifier:
         :param training_targets: A numpy 2-d array of training targets to create a model with
         :return: None
         """
-        self.scale_data(training_data)
+        self.create_data_scalar(training_data)
         training_data_std = self.std_scalar.transform(training_data)
-        self.data = [(point, i)
-                     for i, point in enumerate(np.array(training_data_std))]
+        if self.use_tree:
+            self.data = [
+                (point, i)
+                for i, point in enumerate(np.array(training_data_std))
+            ]
+        else:
+            self.data = training_data_std
         self.targets = np.array(training_targets)
         if self.use_tree:
             self.kd_tree = kdTree(self.data)
@@ -57,7 +62,7 @@ class kNNClassifier:
         else:
             return self.predict_euclid(testing_data_std)
 
-    def scale_data(self, data):
+    def create_data_scalar(self, data):
         self.std_scalar = preprocessing.StandardScaler().fit(data)
 
     def predict_tree(self, testing_data, average=False):
@@ -111,8 +116,11 @@ class kNNClassifier:
                 closest[n] = np.unique(classes)
             else:
                 # Otherwise return the most common class
-                counts = np.zeros(max(classes) + 1)
 
+                # Create an array with each index representing a target
+                counts = np.zeros(np.shape(self.targets)[0])
+                # Increment each target index every time it appears in the
+                # neighbors
                 counts = list(
                     map(lambda index: counts[self.targets[index]] + 1,
                         indices))
