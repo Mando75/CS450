@@ -118,12 +118,11 @@ class kNNClassifier:
                 # Otherwise return the most common class
 
                 # Create an array with each index representing a target
-                counts = np.zeros(np.shape(self.targets)[0])
+                counts = np.zeros(len(np.unique(self.targets)))
                 # Increment each target index every time it appears in the
                 # neighbors
-                counts = list(
-                    map(lambda index: counts[self.targets[index]] + 1,
-                        indices))
+                for i in indices:
+                    counts[self.targets[i]] += 1
 
                 closest[n] = np.max(counts)
 
