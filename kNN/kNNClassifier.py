@@ -1,11 +1,12 @@
 import numpy as np
 from kNN.kdTree import kdTree
+from sklearn import preprocessing
 
 
 class kNNClassifier:
     """
         Defines a k-Nearest Neighbor Classifier for
-        predicting classifications. To work the classifier, 
+        predicting classifications. To work the classifier,
         provide training data with actual targets to the fit method.
         You can then run predictions using the predict method.
     """
@@ -13,7 +14,7 @@ class kNNClassifier:
     def __init__(self, k=1, use_tree=True):
         """
         Initialize the class setting the k neighbors to be searched for
-        :param k: 
+        :param k:
         :param use_tree: Indicate whether to use the k-dimensional tree algorithm to predict targets, or the
         Euclidean distance algorithm. Default is True.
         """
@@ -22,19 +23,21 @@ class kNNClassifier:
         self.targets = np.array([])
         self.kd_tree = None
         self.use_tree = use_tree
+        self.std_scalar = None
 
     def fit(self, training_data, training_targets):
         """
-        Takes training data and targets as parameters. 
-        Will use the training data to construct a k-dimensional 
+        Takes training data and targets as parameters.
+        Will use the training data to construct a k-dimensional
         tree for future predictions
         :param training_data: A numpy 2-d array of training data to create a model with
         :param training_targets: A numpy 2-d array of training targets to create a model with
         :return: None
         """
-
+        self.scale_data(training_data)
+        training_data_std = self.std_scalar.transform(training_data)
         self.data = [(point, i)
-                     for i, point in enumerate(np.array(training_data))]
+                     for i, point in enumerate(np.array(training_data_std))]
         self.targets = np.array(training_targets)
         if self.use_tree:
             self.kd_tree = kdTree(self.data)
@@ -44,20 +47,24 @@ class kNNClassifier:
         Attempts to predict the targets for the provided testing data using either
         a Euclidean distance algorithm, or a k-dimensional tree
         :param testing_data: A numpy 2-d array of testing data to predict
-        :param average: Indicate whether the algorithm should return the mean of the k neighbor targets 
+        :param average: Indicate whether the algorithm should return the mean of the k neighbor targets
         or the most common k neighbor target. Default is false (meaning most common k neighbor target)
         :return: Array of predictions with corresponding indexes to the provided test data
         """
+        testing_data_std = self.std_scalar.transform(testing_data)
         if self.use_tree:
-            return self.predict_tree(testing_data, average)
+            return self.predict_tree(testing_data_std, average)
         else:
-            return self.predict_euclid(testing_data)
+            return self.predict_euclid(testing_data_std)
+
+    def scale_data(self, data):
+        self.std_scalar = preprocessing.StandardScaler().fit(data)
 
     def predict_tree(self, testing_data, average=False):
         """
         Attempts to predict the target for the provided testing data using
         a k-dimensional tree
-        :param testing_data: A numpy 2-d array of testing data to predict 
+        :param testing_data: A numpy 2-d array of testing data to predict
         :param average: Indicate whether or the algorithm should return the mean of the k neighbor targets
         or the most common neighbor target. Default is false (meaning most common k neighbor target)
         :return: Array of predictions with corresponding indexes to the provided test data
