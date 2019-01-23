@@ -11,7 +11,7 @@ class kNNClassifier:
         You can then run predictions using the predict method.
     """
 
-    def __init__(self, k=1, use_tree=True):
+    def __init__(self, k=1, use_tree=True, scale=True):
         """
         Initialize the class setting the k neighbors to be searched for
         :param k:
@@ -19,6 +19,7 @@ class kNNClassifier:
         Euclidean distance algorithm. Default is True.
         """
         self.k = k
+        self.should_scale = scale
         self.data = np.array([])
         self.targets = np.array([])
         self.kd_tree = None
@@ -34,15 +35,14 @@ class kNNClassifier:
         :param training_targets: A numpy 2-d array of training targets to create a model with
         :return: None
         """
-        self.create_data_scalar(training_data)
-        training_data_std = self.std_scalar.transform(training_data)
+        if self.should_scale:
+            self.create_data_scalar(training_data)
+            training_data = self.std_scalar.transform(training_data)
         if self.use_tree:
-            self.data = [
-                (point, i)
-                for i, point in enumerate(np.array(training_data_std))
-            ]
+            self.data = [(point, i)
+                         for i, point in enumerate(np.array(training_data))]
         else:
-            self.data = training_data_std
+            self.data = training_data
         self.targets = np.array(training_targets)
         if self.use_tree:
             self.kd_tree = kdTree(self.data)
@@ -56,11 +56,12 @@ class kNNClassifier:
         or the most common k neighbor target. Default is false (meaning most common k neighbor target)
         :return: Array of predictions with corresponding indexes to the provided test data
         """
-        testing_data_std = self.std_scalar.transform(testing_data)
+        if self.should_scale:
+            testing_data = self.std_scalar.transform(testing_data)
         if self.use_tree:
-            return self.predict_tree(testing_data_std, average)
+            return self.predict_tree(testing_data, average)
         else:
-            return self.predict_euclid(testing_data_std)
+            return self.predict_euclid(testing_data)
 
     def create_data_scalar(self, data):
         self.std_scalar = preprocessing.StandardScaler().fit(data)
