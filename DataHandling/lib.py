@@ -23,10 +23,11 @@ def run_model(data, targets, message, regression=False):
         classifier.fit(train_d, train_t)
         predict = classifier.predict(test_d)
         diff = get_diff(predict, test_t, regression)
-        print("#################################")
+        print("\n\n#################################")
         print(c_names[index])
         print(message)
-        print("#################################")
+        print("#################################\n")
+        print("Result:")
         if not regression:
             print("Accuracy",
                   round(((test_t.size - len(diff)) / test_t.size) * 100, 2))
