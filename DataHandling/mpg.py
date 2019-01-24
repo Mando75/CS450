@@ -63,7 +63,7 @@ def combo_manip_mpg(dataset):
     for cat in cats:
         dataset["car name"].replace(
             r'.*' + re.escape(cat[0]) + r'.*',
-            str(cat[1]),
+            cat[1],
             regex=True,
             inplace=True)
 
@@ -76,6 +76,11 @@ def combo_manip_mpg(dataset):
 
 
 def get_car_makes(data):
+    """
+    Get's unique car makes from the dataset
+    :param data: 
+    :return: 
+    """
     cats = set()
     for car in data:
         cats.add((car.split(" ", 1)[0]))
