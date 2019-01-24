@@ -1,16 +1,11 @@
-from cars import test_cars
+from DataHandling.cars import test_cars
 
 
 def main():
-    print("######################")
-    print(" TESTING WITH MY KNN  ")
-    print("######################")
-    test_cars(sklearn=False)
-
     print("###########################")
     print(" TESTING WITH SKLEARN KNN  ")
     print("###########################")
-    test_cars(sklearn=True)
+    test_cars()
 
 
 if __name__ == '__main__':
