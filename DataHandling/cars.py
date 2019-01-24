@@ -1,10 +1,11 @@
-from sklearn.neighbors import KNeighborsClassifier
+from DataHandling.lib import run_model
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from kNN.kNNClassifier import kNNClassifier
 
 
 def test_cars():
+    print("#########################")
+    print("  Testing Cars dataset")
+    print("#########################")
     headers = [
         "buying", "maint", "doors", "persons", "lug_boot", "safety", "target"
     ]
@@ -96,35 +97,3 @@ def find_replace_car(dataset):
     dataset["persons"] = dataset["persons"].astype("int")
     dataset["doors"] = dataset["doors"].astype("int")
     return dataset
-
-
-def run_model(data, targets, message):
-    classifiers = [
-        KNeighborsClassifier(n_neighbors=3),
-        kNNClassifier(k=3, use_tree=True, scale=False)
-    ]
-    c_names = ["Sklearn", "Personal kNN w/ Tree"]
-    train_d, test_d, train_t, test_t = train_test_split(
-        data, targets, shuffle=True)
-    for index, classifier in enumerate(classifiers):
-        classifier.fit(train_d, train_t)
-        predict = classifier.predict(test_d)
-        diff = get_diff(predict, test_t)
-        print("#################################")
-        print(c_names[index])
-        print(message)
-        print("#################################")
-        print("Accuracy",
-              round(((test_t.size - len(diff)) / test_t.size) * 100, 2))
-
-
-def get_diff(predicted_t, actual_t):
-    diff = []
-    for index, predicted in enumerate(predicted_t):
-        if predicted != actual_t[index]:
-            diff.append({
-                'index': index,
-                'predicted': predicted,
-                'actual': actual_t[index]
-            })
-    return diff
