@@ -5,7 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/HardcodedClassifier" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.6 (CS450)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.7 (CS450)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="R User Library" level="project" />
     <orderEntry type="library" name="R Skeletons" level="application" />
