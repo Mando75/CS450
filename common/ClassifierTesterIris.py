@@ -1,5 +1,6 @@
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import KBinsDiscretizer
 
 
 class ClassifierTesterIris:
@@ -22,12 +23,16 @@ class ClassifierTesterIris:
             print("DIFF: ", diff)
             print("ACCURACY: ", accuracy)
 
-    def test(self, num_tests=100, show=False, average=False):
+    def test(self, num_tests=100, show=False, average=False, discretize=False):
         self.num_tests = num_tests
         iris = datasets.load_iris()
         for i in range(0, num_tests):
             training_data, testing_data, training_targets, testing_targets = train_test_split(
-                iris.data, iris.target, shuffle=True)
+                iris.data, iris.target, shuffle=True, test_size=.33)
+            if discretize:
+                discretizer = KBinsDiscretizer(n_bins=10, encode='ordinal')
+                training_data = discretizer.fit_transform(training_data)
+                testing_data = discretizer.fit_transform(testing_data)
 
             model = self.train(training_data, training_targets)
             if average:
