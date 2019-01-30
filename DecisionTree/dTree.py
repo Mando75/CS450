@@ -1,24 +1,15 @@
 import numpy as np
+import sys
+
+sys.setrecursionlimit(1500)
 
 
 class dTree:
     def __init__(self, training_data, target_data):
         self.root = dTreeNode(training_data, target_data)
 
-    def search(self, features, root=None):
+    def search(self, features):
         return self.root.search(features)
-        # if root is None:
-        #     root = self.root
-        # target = root
-        # while not target.value:
-        #     looping = True
-        #     for node in target.children:
-        #         if features[node.feature] == node.split_value:
-        #             target = node
-        #             return target.value
-        #     if looping:
-        #         break
-        # return target.value
 
 
 class dTreeNode:
@@ -108,7 +99,7 @@ class dTreeNode:
                 if features[node.feature] == node.split_value:
                     return node.search(features, self)
 
-            # for node in self.children:
-            #     if np.ceil(features[node.feature]) == np.ceil(
-            #             node.split_value):
-            #         return node.search(features, self)
+            if parent is not None:
+                return np.argmax(np.bincount(parent.targets))
+
+        return None
