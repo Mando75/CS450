@@ -12,7 +12,7 @@ def test_cars():
     cars_data = pd.read_csv(
         "../datasets/car.data.csv", header=None, names=headers)
     test_one_hot(cars_data)
-    test_find_replace(cars_data)
+    test_label_encoding(cars_data)
 
 
 def test_one_hot(cars_data):
@@ -40,7 +40,7 @@ def one_hot_car(dataset):
         columns=["buying", "maint", "doors", "persons", "lug_boot", "safety"])
 
 
-def test_find_replace(cars_data):
+def test_label_encoding(cars_data):
     fr_cars = label_encode_car(cars_data)
     targets = fr_cars["target"].values
     column_names = fr_cars.columns.values
