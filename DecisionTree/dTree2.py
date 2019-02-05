@@ -1,33 +1,43 @@
 import pandas as pd
 import numpy as np
 from functools import reduce
+import pydot
+import random
 
 
 class dNode:
+    """
+    Represents a node in the decision tree
+    """
+
     def __init__(self, label, leaf=False):
+        """
+        initialize the node with a label and
+        whether or not it is a leaf
+        :param label: The attribute this node is splitting
+        :param leaf: Whether this node is a leaf
+        """
         self.label, self.leaf = label, leaf
+        # Child nodes of this root
         self.children = {}
 
     def append_child(self, child):
+        """
+        Adds a new child node to this node
+        :param child:
+        :return:
+        """
         if self.leaf:
             self.children = child
         else:
             self.children[child[0]] = child[1]
         return self.children[child[0]]
 
-    def __repr__(self):
-        if self.leaf:
-            return self.label
-        else:
-            return f"{self.label} --> {self.children}"
 
 class dTree:
     def __init__(self, data, labels, default_class=None):
         self.root = self.makeTree(data, "class")
         self.labels, self.default_class = labels, default_class
-
-    def __repr__(self):
-        return str(self.root)
 
     def makeTree(self, data, class_name):
         size = data[class_name].size
@@ -91,19 +101,45 @@ class dTreeClassifier:
     def predict(self, data):
         predictions = []
         for index, row in data.iterrows():
-            predictions.append(self.find_one(row))
+            predictions.append(self.traverse_tree_search(self.tree.root, row))
         return predictions
 
-    def find_one(self, row):
-        return self.traverse_tree(self.tree.root, row)
-
-    def traverse_tree(self, node, data):
+    def traverse_tree_search(self, node, data):
         if node is None:
             return self.default_class
         if node.leaf:
             return node.label
         key = int(data[node.label])
         if key in node.children:
-            return self.traverse_tree(node.children[key], data)
+            return self.traverse_tree_search(node.children[key], data)
         return self.default_class
 
+    def traverse_tree_viz(self, node, graph):
+        if node is None:
+            gnode_name = f"{self.default_class}+{random.randint(0, 55000)}"
+            gnode = pydot.Node(gnode_name, label=self.default_class)
+            graph.add_node(gnode)
+            return gnode
+        if node.leaf:
+            gnode_name = f"{node.label}+{random.randint(0, 55000)}"
+            gnode = pydot.Node(gnode_name, label=node.label)
+            graph.add_node(gnode)
+            return gnode
+
+        gnode_name = f"{node.label}+{random.randint(0, 450000)}"
+        gnode = pydot.Node(gnode_name, label=node.label)
+        graph.add_node(gnode)
+        key_dict = {
+            0: 'n',
+            1: 'y',
+            -1: '?'
+        }
+        for c in node.children:
+            cnode = self.traverse_tree_viz(node.children[c], graph)
+            graph.add_edge(pydot.Edge(gnode, cnode, label=f"{key_dict[c]}"))
+        return gnode
+
+    def visualize_tree(self):
+        graph = pydot.Dot(graph_type="graph")
+        self.traverse_tree_viz(self.tree.root, graph)
+        graph.write_png("tree.png")

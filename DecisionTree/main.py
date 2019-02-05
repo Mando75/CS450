@@ -11,14 +11,15 @@ def main():
     tester = ClassifierTesterIris(classifier)
     data = load_voting_records()
     print("Starting tests")
-    printProgressBar(0, 300, prefix="Progress", suffix="Complete")
-    for i in range(0, 300):
-        printProgressBar(i + 1, 300, prefix="Progress", suffix="Complete")
+    printProgressBar(0, 1, prefix="Progress", suffix="Complete")
+    for i in range(0, 1):
+        printProgressBar(i + 1, 1, prefix="Progress", suffix="Complete")
         training_data, testing_data, training_targets, testing_targets = tts(
             data["data"], data["targets"], shuffle=True, test_size=.33)
         classifier.fit(training_data, training_targets)
         predicted_targets = classifier.predict(testing_data)
         tester.compare(predicted_targets, testing_targets.values, False)
+        classifier.visualize_tree()
     tester.summary()
 
 
