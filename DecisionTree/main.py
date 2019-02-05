@@ -35,6 +35,7 @@ def main():
         tester.compare(predicted_targets, testing_targets.values, False)
         if show_viz:
             classifier.visualize_tree(i=i)
+    tester.num_tests = num_tests
     tester.summary()
 
 
