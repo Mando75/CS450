@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from functools import reduce
 
 
 class dNode:
@@ -65,29 +66,18 @@ class dTree:
 
     def get_entropy(self, q_set):
         probabilities = self.get_series_probabilities(q_set)
-        sum = 0
-        for p in probabilities:
-            if p is not 0:
-                sum -= p * np.log2(p)
-        return sum
-        # return reduce(lambda acc, p: acc - (p * np.log2(p)) if p != 0 else 0,
-        #               probabilities)
+        return reduce(lambda acc, p: acc - (p * np.log2(p)) if p != 0 else 0,
+                      probabilities)
 
     def get_series_probabilities(self, q_set):
-        counts = q_set.value_counts()
         size = q_set.size
-        probabilities = []
-        for i in counts:
-            probabilities.append(i / size)
-        return probabilities
-        # return list(map(lambda c: c / size, q_set.value_counts()))
+        return list(map(lambda c: c / size, q_set.value_counts()))
 
 
 class dTreeClassifier:
     def __init__(self):
         self.tree = None
         self.labels = []
-        self.dataset = None
         self.default_class = None
 
     def fit(self, data, target):
@@ -99,7 +89,6 @@ class dTreeClassifier:
         return self.tree
 
     def predict(self, data):
-        self.dataset = data
         predictions = []
         for index, row in data.iterrows():
             predictions.append(self.find_one(row))
