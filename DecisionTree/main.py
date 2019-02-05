@@ -4,22 +4,37 @@ from sklearn.model_selection import train_test_split as tts
 import pandas as pd
 from numpy import NaN
 from common.progressBar import printProgressBar
+import sys
 
 
 def main():
+    """
+    Expects 2 args, the number of tests to run (integer) and whether or not to
+    generate a tree visualization as a png image using graphviz (y/n)
+    :return:
+    """
+    num_tests = int(float(sys.argv[1]))
+    if num_tests is None:
+        num_tests = 1
+    if sys.argv[2] is 'y':
+        show_viz = True
+    else:
+        show_viz = False
     classifier = dTreeClassifier()
     tester = ClassifierTesterIris(classifier)
     data = load_voting_records()
     print("Starting tests")
-    printProgressBar(0, 1, prefix="Progress", suffix="Complete")
-    for i in range(0, 1):
-        printProgressBar(i + 1, 1, prefix="Progress", suffix="Complete")
+    printProgressBar(0, num_tests, prefix="Progress", suffix="Complete")
+    for i in range(0, num_tests):
+        printProgressBar(
+            i + 1, num_tests, prefix="Progress", suffix="Complete")
         training_data, testing_data, training_targets, testing_targets = tts(
             data["data"], data["targets"], shuffle=True, test_size=.33)
         classifier.fit(training_data, training_targets)
         predicted_targets = classifier.predict(testing_data)
         tester.compare(predicted_targets, testing_targets.values, False)
-        classifier.visualize_tree()
+        if show_viz:
+            classifier.visualize_tree(i=i)
     tester.summary()
 
 
