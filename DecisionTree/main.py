@@ -3,17 +3,23 @@ from common.ClassifierTesterIris import ClassifierTesterIris
 from sklearn.model_selection import train_test_split as tts
 import pandas as pd
 from numpy import NaN
+from common.progressBar import printProgressBar
 
 
 def main():
     classifier = dTreeClassifier()
     tester = ClassifierTesterIris(classifier)
     data = load_voting_records()
-    training_data, testing_data, training_targets, testing_targets = tts(
-        data["data"], data["targets"], shuffle=True)
-    classifier.fit(training_data, training_targets)
-    predicted_targets = classifier.predict(testing_data)
-    tester.compare(predicted_targets, testing_targets.values, True)
+    print("Starting tests")
+    printProgressBar(0, 300, prefix="Progress", suffix="Complete")
+    for i in range(0, 300):
+        printProgressBar(i + 1, 300, prefix="Progress", suffix="Complete")
+        training_data, testing_data, training_targets, testing_targets = tts(
+            data["data"], data["targets"], shuffle=True, test_size=.33)
+        classifier.fit(training_data, training_targets)
+        predicted_targets = classifier.predict(testing_data)
+        tester.compare(predicted_targets, testing_targets.values, False)
+    tester.summary()
 
 
 def load_voting_records():
