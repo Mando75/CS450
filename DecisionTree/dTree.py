@@ -1,7 +1,4 @@
 import numpy as np
-import sys
-
-sys.setrecursionlimit(1500)
 
 
 class dTree:
@@ -95,9 +92,25 @@ class dTreeNode:
         if not self.has_children:
             return self.value
         else:
-            for node in self.children:
-                if features[node.feature] == node.split_value:
-                    return node.search(features, self)
+            # closest = None
+            # closest_distance = None
+            for child in self.children:
+                #     if features[child.feature] == child.split_value:
+                #         return child.search(features, self)
+                #     elif closest is None:
+                #         closest = child
+                #         closest_distance = np.abs(child.split_value -
+                #                                   features[child.feature])
+                #     else:
+                #         child_distance = np.abs(child.split_value -
+                #                                 features[child.feature])
+                #         if child_distance < closest_distance:
+                #             closest = child
+                #             closest_distance = child_distance
+                # return closest.search(features, self)
+
+                if features[child.feature] == child.split_value:
+                    return child.search(features, self)
 
             if parent is not None:
                 return np.argmax(np.bincount(parent.targets))
