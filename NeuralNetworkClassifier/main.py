@@ -6,20 +6,31 @@ from common.ClassifierTesterIris import ClassifierTesterIris as cti
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 from common.progressBar import printProgressBar
+import matplotlib.pyplot as plt
+
+
+def plot_errors(errors):
+    plt.plot(errors)
+    plt.ylabel("Iteration mean error")
+    plt.show()
 
 
 def get_params():
+    show_plot = int(
+        input(
+            "\nShow error plot (1 or 0)? Not recommended for more than 1 test..."
+        ))
     num_tests = int(input("\nEnter number of tests (int): "))
     learning_rate = float(input("\nEnter learning Rate (.2-.4): "))
     momentum = float(input("\nEnter Momentum (.1-.9): "))
     error_change_per = float(input("\nEnter Err Change Percent (.1-.5): "))
     epoch_iter = int(input("\nEnter # Epoch Iterations (int): "))
-    return num_tests, learning_rate, momentum, error_change_per, epoch_iter
+    return show_plot, num_tests, learning_rate, momentum, error_change_per, epoch_iter
 
 
 def test_dataset(dataset, name):
     print("\nStarting tests " + name)
-    num_tests, learning_rate, momentum, error_change_per, epoch_iter = get_params(
+    show_plot, num_tests, learning_rate, momentum, error_change_per, epoch_iter = get_params(
     )
     avg_acc = 0
     printProgressBar(0, num_tests, prefix="Progress", suffix="Complete")
@@ -33,8 +44,10 @@ def test_dataset(dataset, name):
         testing_data = scalar.transform(testing_data)
         n = NeuralNetwork()
         n.make_net(len(np.unique(training_targets)), training_data.shape[1])
-        n.fit(training_data, training_targets, learning_rate, momentum,
-              error_change_per, epoch_iter)
+        errors = n.fit(training_data, training_targets, learning_rate,
+                       momentum, error_change_per, epoch_iter)
+        if show_plot:
+            plot_errors(errors)
         results = n.predict(testing_data)
         diff = cti.get_diff(results, testing_targets)
         size = testing_targets.size

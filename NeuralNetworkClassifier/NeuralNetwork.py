@@ -19,12 +19,12 @@ class NeuralNetwork(object):
         while alive and limit:
             instance_mean_err = 0
             for i, row in enumerate(training_data):
-                self.compute_results(row)
+                self.feed_forward(row)
                 targets = [
                     1 if x == training_targets[i] else 0
                     for x in range(len(training_targets))
                 ]
-                instance_mean_err += self.update_neurons(
+                instance_mean_err += self.back_propagate(
                     row, targets, learning_rate, momentum)
             instance_mean_err /= len(training_data)
             error_data.append(abs(instance_mean_err))
@@ -45,7 +45,7 @@ class NeuralNetwork(object):
         predictions = []
 
         for row in test_data:
-            self.compute_results(row)
+            self.feed_forward(row)
 
             for n in self.layers[-1].neurons:
                 results.append(n.value)
@@ -71,7 +71,7 @@ class NeuralNetwork(object):
             Layer(target_count,
                   len(self.layers[-1].neurons) + 1))
 
-    def compute_results(self, inputs):
+    def feed_forward(self, inputs):
         working_inputs = []
         for layer in self.layers:
             for neuron in layer.neurons:
@@ -83,7 +83,7 @@ class NeuralNetwork(object):
             for neuron in layer.neurons:
                 working_inputs.append(neuron.value)
 
-    def update_neurons(self, inputs, target, learning_rate, momentum):
+    def back_propagate(self, inputs, target, learning_rate, momentum):
         first = True
         avg_layer_err = 0
         for layer in range(len(self.layers) - 1, -1, -1):
