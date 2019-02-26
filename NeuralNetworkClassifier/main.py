@@ -1,5 +1,6 @@
 from NeuralNetworkClassifier.NeuralNetwork import NeuralNetwork
 from sklearn.datasets import load_iris
+from sklearn.datasets import load_wine
 from sklearn.model_selection import train_test_split as tts
 from common.ClassifierTesterIris import ClassifierTesterIris as cti
 from sklearn.preprocessing import StandardScaler
@@ -16,18 +17,17 @@ def get_params():
     return num_tests, learning_rate, momentum, error_change_per, epoch_iter
 
 
-def main():
-    iris = load_iris()
+def test_dataset(dataset, name):
+    print("\nStarting tests " + name)
     num_tests, learning_rate, momentum, error_change_per, epoch_iter = get_params(
     )
     avg_acc = 0
-    print("\nStarting tests")
     printProgressBar(0, num_tests, prefix="Progress", suffix="Complete")
     for i in range(num_tests):
         printProgressBar(
             i + 1, num_tests, prefix="Progress", suffix="Complete")
         training_data, testing_data, training_targets, testing_targets = tts(
-            iris.data, iris.target, shuffle=True, test_size=.33)
+            dataset.data, dataset.target, shuffle=True, test_size=.33)
         scalar = StandardScaler().fit(training_data)
         training_data = scalar.transform(training_data)
         testing_data = scalar.transform(testing_data)
@@ -41,6 +41,13 @@ def main():
         accuracy = round(((size - len(diff)) / size) * 100, 2)
         avg_acc += accuracy
     print("ACCURACY ", avg_acc / num_tests)
+
+
+def main():
+    iris = load_iris()
+    wine = load_wine()
+    test_dataset(iris, "Iris")
+    test_dataset(wine, "Wine")
 
 
 if __name__ == '__main__':
