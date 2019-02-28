@@ -11,7 +11,7 @@ class Neuron(object):
         self.weight_deltas = [0] * num_weights
         self.value = 0
         self.previous_value = 0
-        self.y_delta = 0
+        self.delta_j = 0
 
     def calculate_value(self, inputs):
         if len(inputs) is not self.num_weights:
@@ -34,14 +34,14 @@ class Neuron(object):
             layer_sum = 0
             for n in next_layer:
                 layer_sum += n.y_delta * n.previous_weights[current_index]
-            self.y_delta = self.value * (1 - self.value) * layer_sum
+            self.delta_j = self.value * (1 - self.value) * layer_sum
         else:
-            self.y_delta = self.value * (1 - self.value) * (
+            self.delta_j = self.value * (1 - self.value) * (
                 self.value - target)
 
         self.weight_deltas = list(
             map(
-                lambda x: learning_rate * self.y_delta * previous_layer[x] + momentum * self.weight_deltas[x],
+                lambda x: learning_rate * self.delta_j * previous_layer[x] + momentum * self.weight_deltas[x],
                 range(self.num_weights)))
         self.weights = list(map(sub, self.weights, self.weight_deltas))
 
