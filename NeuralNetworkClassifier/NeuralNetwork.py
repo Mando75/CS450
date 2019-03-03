@@ -95,7 +95,7 @@ class NeuralNetwork(object):
                         learning_rate,
                         momentum, [-1] + inputs.tolist(),
                         target=target[i])
-                    avg_err += n.y_delta
+                    avg_err += n.delta_j
                 first = False
                 avg_err /= len(layer_o.neurons)
             elif first:
@@ -106,7 +106,7 @@ class NeuralNetwork(object):
                         [n.value for n in self.layers[layer - 1].neurons],
                         target=target[i])
                     first = False
-                    avg_err += n.y_delta
+                    avg_err += n.delta_j
             elif layer is 0:
                 for i, n in enumerate(layer_o.neurons):
                     n.tweak_weights(
