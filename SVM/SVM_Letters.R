@@ -57,3 +57,18 @@ print("Cost")
 print(bestLetterC)
 print("Gamma")
 print(bestLetterGamma)
+
+# Output of running this:
+# [1] "testing letter"
+# [1] "Best Values for Gamma and Cost with accompanying accuracy"
+# [1] "Agreement"
+# [1] 19565
+# [1] "Accuracy"
+# agreement
+#   FALSE    TRUE
+# 0.02175 0.97825
+# [1] "Cost"
+# [1] 1
+# [1] "Gamma"
+# [1] 0.11
+# So it is about 97 percent accurate when stopping training at .1 percent improvements.

@@ -71,3 +71,17 @@ print(bestVowelC)
 print("Gamma")
 print(bestVowelGamma)
 
+# Output
+# [1] "testing vowels"
+# [1] "Best Values for Gamma and Cost with accompanying accuracy"
+# [1] "Agreement"
+# [1] 978
+# [1] "Accuracy"
+# agreement
+#      FALSE       TRUE
+# 0.01212121 0.98787879
+# [1] "Cost"
+# [1] 1
+# [1] "Gamma"
+# [1] 0.11
+# So about 98 percent accurate when stopping improvements at .1 percent error change
