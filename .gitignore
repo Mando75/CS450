@@ -204,3 +204,5 @@ dmypy.json
 # Submission Reports
 reports/*
 # End of https://www.gitignore.io/api/python,pycharm
+
+node_modules/
