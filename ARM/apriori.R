@@ -34,4 +34,8 @@ rules <- sort(rules, decreasing = TRUE, by = "lift")
 interesting <- c(13, 25, 170, 366,385)
 inspect(rules[interesting])
 
+# This should work, but the tcltk package isn't working on my Mac... Haven't been able to figure out why
+# library(arulesViz)
+# plot(rules[1:10], method = "graph", engine = "interactive", shading = NA)
+
 
