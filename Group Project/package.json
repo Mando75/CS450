@@ -1,0 +1,16 @@
+{
+  "name": "canvas-data-fetcher",
+  "version": "1.0.0",
+  "description": "A canvas data fetcher for our group project",
+  "main": "index.js",
+  "author": "Bryan Muller",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "node-fetch": "^2.3.0",
+    "parse-link-header": "^1.0.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
