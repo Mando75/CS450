@@ -4,7 +4,7 @@ const { fetchPaginatedData } = require("./fetchPagination");
 const devToken = process.env.DEV_TOKEN;
 
 const url = (path, params = []) => {
-  let url = `https://byui.instructure.com/api/v1${path}?access_token=${devToken}&per_page=50&exclude_blueprint_courses=true`;
+  let url = `https://byui.instructure.com/api/v1${path}?access_token=${devToken}&per_page=50`;
   if (params) {
     params.forEach(param => {
       url += `&${param.key}=${param.value}`;
@@ -23,11 +23,16 @@ const csAccountId = 67;
 function writeCourseIds() {
   return new Promise((resolve, reject) => {
     fetchPaginatedData(url(allCourses(csAccountId)))
-      .then(courses => courses.map(course => course.id))
+      .then(courses =>
+        courses.map(({ id, course_code }) => ({
+          id,
+          courseCode: course_code.replace(" ", "")
+        }))
+      )
       .then(courses =>
         fs.writeFile(
           "./json/courseIds.json",
-          JSON.stringify({ courses }),
+          JSON.stringify({ courses }, null, 2),
           "utf8"
         )
       )
@@ -41,9 +46,12 @@ function writeCourseIds() {
  * Checks first for an existing list of courses,
  * if they don't exist, refetches them
  */
-function getCourseIds() {
+function getCourses(force = false) {
   return new Promise((resolve, reject) => {
     try {
+      if (force) {
+        throw new Error("force refetch");
+      }
       const ids = require("./json/courseIds.json").courses;
       resolve(ids);
     } catch (e) {
@@ -56,5 +64,5 @@ function getCourseIds() {
 }
 
 module.exports = {
-  getCourseIds
+  getCourses
 };
