@@ -207,4 +207,4 @@ reports/*
 
 node_modules/
 .env
-json/
+*/json/*.json

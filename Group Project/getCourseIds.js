@@ -4,7 +4,7 @@ const { fetchPaginatedData } = require("./fetchPagination");
 const devToken = process.env.DEV_TOKEN;
 
 const url = (path, params = []) => {
-  let url = `https://byui.instructure.com/api/v1${path}?access_token=${devToken}&per_page=50`;
+  let url = `https://byui.instructure.com/api/v1${path}?access_token=${devToken}&per_page=50&exclude_blueprint_courses=true`;
   if (params) {
     params.forEach(param => {
       url += `&${param.key}=${param.value}`;
