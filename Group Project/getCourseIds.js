@@ -11,7 +11,12 @@ const csAccountId = 67;
  */
 function writeCourseIds() {
   return new Promise((resolve, reject) => {
-    fetchPaginatedData(url(allCourses(csAccountId)))
+    fetchPaginatedData(
+      url(allCourses(csAccountId), [
+        { key: "state[]", value: "available" },
+        { key: "state[]", value: "completed" }
+      ])
+    )
       .then(courses =>
         courses
           .map(({ id, course_code }) => ({
@@ -47,8 +52,8 @@ function getCourses(force = false) {
       if (force) {
         throw new Error("force refetch");
       }
-      const ids = require("./json/courseIds.json").courses;
-      resolve(ids);
+      const courses = require("./json/courseIds.json").courses;
+      resolve(courses);
     } catch (e) {
       console.log("Course Ids do not exist... fetching now");
       writeCourseIds()
