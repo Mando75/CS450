@@ -1,17 +1,6 @@
 const fs = require("fs").promises;
 const { fetchPaginatedData } = require("./fetchPagination");
-
-const devToken = process.env.DEV_TOKEN;
-
-const url = (path, params = []) => {
-  let url = `https://byui.instructure.com/api/v1${path}?access_token=${devToken}&per_page=50`;
-  if (params) {
-    params.forEach(param => {
-      url += `&${param.key}=${param.value}`;
-    });
-  }
-  return url;
-};
+const { url } = require("./utils");
 
 const allCourses = account => `/accounts/${account}/courses`;
 const csAccountId = 67;
@@ -24,10 +13,16 @@ function writeCourseIds() {
   return new Promise((resolve, reject) => {
     fetchPaginatedData(url(allCourses(csAccountId)))
       .then(courses =>
-        courses.map(({ id, course_code }) => ({
-          id,
-          courseCode: course_code.replace(" ", "")
-        }))
+        courses
+          .map(({ id, course_code }) => ({
+            id,
+            courseCode: course_code.replace(" ", "")
+          }))
+          .filter(
+            ({ courseCode }) =>
+              !courseCode.includes("Master") &&
+              !courseCode.includes("2019.Spring")
+          )
       )
       .then(courses =>
         fs.writeFile(

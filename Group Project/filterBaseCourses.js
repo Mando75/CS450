@@ -2,7 +2,7 @@ const fs = require("fs").promises;
 
 function filterBaseCourses(courses) {
   return new Promise((resolve, reject) => {
-    console.log(courses.length);
+    console.log("Courses: ", courses.length);
     const cs124 = courses.filter(({ courseCode }) =>
       courseCode.includes("124")
     );
@@ -27,7 +27,7 @@ function filterBaseCourses(courses) {
           "utf8"
         )
       )
-      .then(resolve)
+      .then(resolve({ courses, cs124, cs165, cs235 }))
       .catch(reject);
   });
 }

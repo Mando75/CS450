@@ -1,5 +1,6 @@
 const parseLink = require("parse-link-header");
 const fetch = require("node-fetch");
+const { printProgress } = require("./utils");
 
 const devToken = process.env.DEV_TOKEN;
 function fetchPaginatedData(url, data = []) {
@@ -42,11 +43,6 @@ function fetchPaginatedData(url, data = []) {
   );
 }
 
-function printProgress(progress, msg) {
-  process.stdout.clearLine();
-  process.stdout.cursorTo(0);
-  process.stdout.write(msg + " " + progress + "%");
-}
 module.exports = {
   fetchPaginatedData
 };
