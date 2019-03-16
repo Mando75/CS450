@@ -1,4 +1,4 @@
-% Created 2019-03-13 Wed 20:29
+% Created 2019-03-16 Sat 17:06
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -14,7 +14,6 @@
 \usepackage{amssymb}
 \usepackage{capt-of}
 \usepackage{hyperref}
-\usepackage{tabularx}
 \author{Bryan Muller}
 \date{\today}
 \title{Week 10: Clustering}
@@ -30,9 +29,9 @@
 \maketitle
 
 \section*{AGGLOMERATIVE HIERARCHICAL CLUSTERING}
-\label{sec:org5d29fa5}
+\label{sec:org607ea3c}
 \subsection*{Step 1}
-\label{sec:orgd6d9830}
+\label{sec:orgc1f7535}
 Completed
 \begin{verbatim}
 # Load the dataset
@@ -41,7 +40,7 @@ library(cluster)
 data = state.x77
 \end{verbatim}
 \subsection*{Step 2}
-\label{sec:org34f5397}
+\label{sec:orgab31822}
 \begin{verbatim}
 # Use hierarchical clustering to cluster the data on all attributes and produce a dendrogram
 png(filename="hclust-all-attri-no-scale.png")
@@ -53,7 +52,7 @@ plot(hclust(dist(as.matrix(data))))
 \end{center}
 
 \subsection*{Step 3}
-\label{sec:orgea78e1c}
+\label{sec:org7f5639f}
 \begin{verbatim}
 # Repeat the previous item with a normalized dataset and note any differences
 png(filename="hclust-all-attri-with-scale.png")
@@ -70,7 +69,7 @@ state overpowered nearly all of the other attributes when determining the raw
 data. By normalizing it, the other attributes were able to have a stronger
 influence on the clusters.
 \subsection*{Step 4}
-\label{sec:orgbdc12be}
+\label{sec:org01b5db3}
 \begin{verbatim}
 
 # Remove "Area" from the attributes and re-cluster (and note any differences)
@@ -91,7 +90,7 @@ much larger than the other. You are now able to see actual regions in the
 country being grouped together. 
 
 \subsection*{Step 5}
-\label{sec:orgc3bddae}
+\label{sec:orgca6b404}
 
 \begin{verbatim}
 # Cluster only on the Frost attribute and observe the results
@@ -107,14 +106,14 @@ I saw pretty close to what I expected. States with similar weather patterns are
 grouped together, and often states on similar latitudes are grouped together,
 even if they are far apart. 
 \section*{USING K-MEANS}
-\label{sec:orgdcc63b2}
+\label{sec:orgeaed122}
 \subsection*{Step 1}
-\label{sec:org130f0b9}
+\label{sec:org68e3cc6}
 \begin{verbatim}
 data <- scale(state.x77)
 \end{verbatim}
 \subsection*{Step 2}
-\label{sec:org2c27125}
+\label{sec:org49b60ca}
 \begin{verbatim}
 myClusters = kmeans(data, 3)
 summary(myClusters)
@@ -122,7 +121,7 @@ print(myClusters$centers)
 print(myClusters$cluster)
 \end{verbatim}
 \subsubsection*{Summary}
-\label{sec:org178039a}
+\label{sec:org71a6acb}
 \begin{verbatim}
 # Length Class  Mode
 # cluster      50     -none- numeric
@@ -136,7 +135,7 @@ print(myClusters$cluster)
 # ifault        1     -none- numeric
 \end{verbatim}
 \subsubsection*{Mean Values}
-\label{sec:orga36e8b5}
+\label{sec:orgd1b3190}
 
 \begin{center}
 \begin{tabular}{rrrr}
@@ -159,7 +158,7 @@ Murder & HS-Grad & Frost & Area\\
 \end{center}
 
 \subsubsection*{Cluster Assignments}
-\label{sec:org8759f22}
+\label{sec:org7f85d08}
 
 \begin{center}
 \begin{tabular}{rrrrr}
@@ -187,17 +186,17 @@ Virginia & Washington & West-Virginia & Wisconsin & Wyoming\\
 \end{tabular}
 \end{center}
 \subsubsection*{Cluster Assignments Plot}
-\label{sec:orge1d668d}
+\label{sec:org383097d}
 \begin{center}
 \includegraphics[width=.9\linewidth]{k-3-clusters.png}
 \end{center}
 \subsubsection*{Analysis}
-\label{sec:org7c96fa3}
+\label{sec:org7b65b29}
 My guess is that area and population are the largest factors in these grouping.
 We can see on the plot that Alaska, California, and Texas are outliers, probably
 due to their size/population ratios. 
 \subsection*{Step 3}
-\label{sec:orgf729d21}
+\label{sec:orgaf970c1}
 \begin{verbatim}
 errors <- c()
 for (k in 1:25) {
@@ -212,14 +211,14 @@ plot(errors, xlab = "k", ylab = "within-cluster sum of squares error")
 \end{center}
 
 \subsection*{Step 4}
-\label{sec:org451160d}
+\label{sec:org4439069}
 I picked 10, as it seems like that is when the rate of error stops decreasing
 significantly. 
 \begin{verbatim}
 k <- 10
 \end{verbatim}
 \subsection*{Step 5}
-\label{sec:orgd337082}
+\label{sec:org376b662}
 \begin{verbatim}
 print(cluster$cluster)
 \end{verbatim}
@@ -250,12 +249,12 @@ Virginia & Washington & West-Virginia & Wisconsin & Wyoming\\
 \end{center}
 
 \subsection*{Step 6}
-\label{sec:orgc351224}
+\label{sec:org978daa7}
 \begin{center}
 \includegraphics[width=.9\linewidth]{kmeans-10.png}
 \end{center}
 \subsection*{Step 7}
-\label{sec:orgf0e2259}
+\label{sec:org90c3b28}
 
 \begin{center}
 \begin{tabular}{rrrr}
@@ -297,6 +296,6 @@ nearly as much of a range, indicating they do not have a large influence on
 the centers in comparison.
 
 \section*{Summary}
-\label{sec:orga7ca44c}
+\label{sec:org9fc90bc}
 D). I completed all of the steps.
 \end{document}
