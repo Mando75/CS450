@@ -32,9 +32,15 @@ function fetchStudentEnrollments(courseIds, enrollments = [], length = null) {
         })
         .then(enrollments => {
           return enrollments.map(
-            ({ user_id: userId, course_id: courseId, grades }) => ({
+            ({
+              user_id: userId,
+              course_id: courseId,
+              grades,
+              sis_user_id: sisUserId
+            }) => ({
               userId,
               courseId,
+              inumber: sisUserId,
               currentScore: grades ? grades.current_score : null,
               finalScore: grades ? grades.final_score : null,
               currentGrade: grades ? grades.current_grade : null,
