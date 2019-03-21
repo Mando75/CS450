@@ -8,9 +8,12 @@ from sklearn.metrics import accuracy_score
 from sklearn.neural_network import MLPClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import BaggingClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import RandomForestClassifier
 
 
-def printResults(dataset_name, classifier_name, accuracy):
+def output(dataset_name, classifier_name, accuracy):
     print(f'|   {dataset_name}   |   {classifier_name}   |  {"{:.1f}%".format(accuracy)}   |')
 
 
@@ -28,6 +31,9 @@ def test_classifier(data, classifier, test_size=.33):
 nn = MLPClassifier(hidden_layer_sizes=(75, ), max_iter=20000)
 nb = GaussianNB()
 knn = KNeighborsClassifier(n_neighbors=7)
+bag = BaggingClassifier(base_estimator=knn, n_estimators=250)
+adab = AdaBoostClassifier(n_estimators=150)
+rf = RandomForestClassifier(n_estimators=50)
 ########################
 # Datasets
 #######################
@@ -37,22 +43,30 @@ flare = load_flare()
 
 print("|   Dataset   |   Classifier   |   Accuracy   |")
 print("--------------+----------------+--------------+")
-printResults("Semeion", "Neural Network", test_classifier(semeion, nn, .25))
-printResults("Semeion", "Naive Bayes", test_classifier(semeion, nb, .25))
-printResults("Semeion", "K Nearest Neighbors", test_classifier(semeion, knn, .25))
+output("Semeion", "Neural Network", test_classifier(semeion, nn, .25))
+output("Semeion", "Naive Bayes", test_classifier(semeion, nb, .30))
+output("Semeion", "K Nearest Neighbors", test_classifier(semeion, knn, .25))
+output("Semeion", "Bagging", test_classifier(semeion, bag, .25))
+output("Semeion", "AdaBoost", test_classifier(semeion, adab, .30))
+output("Semeion", "Random Forest", test_classifier(semeion, rf, .25))
 
 print("\n\n")
 
 print("|   Dataset   |   Classifier   |   Accuracy   |")
 print("--------------+----------------+--------------+")
-printResults("Letter", "Neural Network", test_classifier(letter, nn, .25))
-printResults("Letter", "Naive Bayes", test_classifier(letter, nb, .25))
-printResults("Letter", "K Nearest Neighbors", test_classifier(letter, knn, .25))
-
+output("Letter", "Neural Network", test_classifier(letter, nn, .25))
+output("Letter", "Naive Bayes", test_classifier(letter, nb, .33))
+output("Letter", "K Nearest Neighbors", test_classifier(letter, knn, .25))
+output("Letter", "Bagging", test_classifier(letter, bag, .25))
+output("Letter", "AdaBoost", test_classifier(letter, adab, .25))
+output("Letter", "Random Forest", test_classifier(letter, rf, .25))
 print("\n\n")
 
 print("|   Dataset   |   Classifier   |   Accuracy   |")
 print("--------------+----------------+--------------+")
-printResults("Flare", "Neural Network", test_classifier(flare, nn, .25))
-printResults("Flare", "Naive Bayes", test_classifier(flare, nb, .25))
-printResults("Flare", "K Nearest Neighbors", test_classifier(flare, knn, .25))
+output("Flare", "Neural Network", test_classifier(flare, nn, .25))
+output("Flare", "Naive Bayes", test_classifier(flare, nb, .25))
+output("Flare", "K Nearest Neighbors", test_classifier(flare, knn, .25))
+output("Flare", "Bagging", test_classifier(flare, bag, .25))
+output("Flare", "AdaBoost", test_classifier(flare, adab, .25))
+output("Flare", "Random Forest", test_classifier(flare, rf, .25))
