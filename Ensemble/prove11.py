@@ -28,45 +28,50 @@ def test_classifier(data, classifier, test_size=.33):
 ##########################
 # Classifiers
 #########################
-nn = MLPClassifier(hidden_layer_sizes=(75, ), max_iter=20000)
+nn = MLPClassifier(hidden_layer_sizes=(85, ), max_iter=20000)
 nb = GaussianNB()
-knn = KNeighborsClassifier(n_neighbors=7)
+knn = KNeighborsClassifier(n_neighbors=5)
 bag = BaggingClassifier(base_estimator=knn, n_estimators=250)
-adab = AdaBoostClassifier(n_estimators=150)
-rf = RandomForestClassifier(n_estimators=50)
+adab = AdaBoostClassifier(n_estimators=90)
+rf = RandomForestClassifier(n_estimators=70)
+
 ########################
 # Datasets
 #######################
-semeion = load_semeion()
-letter = load_letter()
-flare = load_flare()
 
-print("|   Dataset   |   Classifier   |   Accuracy   |")
-print("--------------+----------------+--------------+")
-output("Semeion", "Neural Network", test_classifier(semeion, nn, .25))
-output("Semeion", "Naive Bayes", test_classifier(semeion, nb, .30))
-output("Semeion", "K Nearest Neighbors", test_classifier(semeion, knn, .25))
-output("Semeion", "Bagging", test_classifier(semeion, bag, .25))
-output("Semeion", "AdaBoost", test_classifier(semeion, adab, .30))
-output("Semeion", "Random Forest", test_classifier(semeion, rf, .25))
+if int(input("Run Semeion? (1/0): ")):
+    semeion = load_semeion()
+    print("|   Dataset   |   Classifier   |   Accuracy   |")
+    print("--------------+----------------+--------------+")
+    output("Semeion", "Neural Network", test_classifier(semeion, nn, .25))
+    output("Semeion", "Naive Bayes", test_classifier(semeion, nb, .30))
+    output("Semeion", "K Nearest Neighbors", test_classifier(semeion, knn, .25))
+    output("Semeion", "Bagging", test_classifier(semeion, bag, .25))
+    output("Semeion", "AdaBoost", test_classifier(semeion, adab, .30))
+    output("Semeion", "Random Forest", test_classifier(semeion, rf, .25))
 
 print("\n\n")
 
-print("|   Dataset   |   Classifier   |   Accuracy   |")
-print("--------------+----------------+--------------+")
-output("Letter", "Neural Network", test_classifier(letter, nn, .25))
-output("Letter", "Naive Bayes", test_classifier(letter, nb, .33))
-output("Letter", "K Nearest Neighbors", test_classifier(letter, knn, .25))
-output("Letter", "Bagging", test_classifier(letter, bag, .25))
-output("Letter", "AdaBoost", test_classifier(letter, adab, .25))
-output("Letter", "Random Forest", test_classifier(letter, rf, .25))
+if int(input("Run Letter? (1/0): ")):
+    letter = load_letter()
+    print("|   Dataset   |   Classifier   |   Accuracy   |")
+    print("--------------+----------------+--------------+")
+    output("Letter", "Neural Network", test_classifier(letter, nn, .25))
+    output("Letter", "Naive Bayes", test_classifier(letter, nb, .33))
+    output("Letter", "K Nearest Neighbors", test_classifier(letter, knn, .25))
+    output("Letter", "Bagging", test_classifier(letter, bag, .25))
+    output("Letter", "AdaBoost", test_classifier(letter, adab, .25))
+    output("Letter", "Random Forest", test_classifier(letter, rf, .25))
+
 print("\n\n")
 
-print("|   Dataset   |   Classifier   |   Accuracy   |")
-print("--------------+----------------+--------------+")
-output("Flare", "Neural Network", test_classifier(flare, nn, .25))
-output("Flare", "Naive Bayes", test_classifier(flare, nb, .25))
-output("Flare", "K Nearest Neighbors", test_classifier(flare, knn, .25))
-output("Flare", "Bagging", test_classifier(flare, bag, .25))
-output("Flare", "AdaBoost", test_classifier(flare, adab, .25))
-output("Flare", "Random Forest", test_classifier(flare, rf, .25))
+if int(input("Run Flare? (1/0): ")):
+    flare = load_flare()
+    print("|   Dataset   |   Classifier   |   Accuracy   |")
+    print("--------------+----------------+--------------+")
+    output("Flare", "Neural Network", test_classifier(flare, nn, .25))
+    output("Flare", "Naive Bayes", test_classifier(flare, nb, .25))
+    output("Flare", "K Nearest Neighbors", test_classifier(flare, knn, .25))
+    output("Flare", "Bagging", test_classifier(flare, bag, .25))
+    output("Flare", "AdaBoost", test_classifier(flare, adab, .25))
+    output("Flare", "Random Forest", test_classifier(flare, rf, .25))
