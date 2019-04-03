@@ -19,7 +19,7 @@ for K in range(20):
     # model = KNeighborsClassifier(n_neighbors=K)
 
     training_data, testing_data, training_targets, testing_targets = tts(
-        data["data"], data["targets"], test_size=.25, shuffle=True)
+        data["data"], data["targets"], test_size=.33, shuffle=True)
     model.fit(training_data, training_targets)  #fit the model
     pred = model.predict(testing_data)  #make prediction on test set
     # accuracy = accuracy_score(testing_targets, pred) * 100
