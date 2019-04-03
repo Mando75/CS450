@@ -27,14 +27,18 @@ def impute_zero(data):
     return data
 
 
-def drop_helper_columns(data):
-    return data.drop(
-        columns=["userId", "currentGrade", "finalGrade", "teacherName"])
+def drop_helper_columns(data, columns=["teacherName"]):
+    return data.drop(columns=columns)
 
 
 def encode_courses(data):
-    data["courseCode"] = data["courseCode"].astype("category")
-    data["courseCode"] = pd.factorize(data["courseCode"])[0] + 1
+    columns = [
+        "currentGrade", "finalGrade", "userId", "courseCode", "courseId",
+        "teacherId"
+    ]
+    for col in columns:
+        data[col] = data[col].astype("category")
+        data[col] = pd.factorize(data[col])[0] + 1
     return data
 
 
