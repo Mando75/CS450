@@ -4,16 +4,17 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import accuracy_score
 from math import sqrt
 from sklearn.neural_network import MLPRegressor
-from sklearn.neural_network import MLPClassifier
 import numpy as np
 import matplotlib
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
+import pandas as pd
 
 data = load_data(use_means=False)
 
 rmse_val = []  #to store rmse values for different k
-for K in np.linspace(0.1, 1, 11):
+acc_scores = []
+for K in range(20):
     model = MLPRegressor(max_iter=500, learning_rate='adaptive')
     # model = MLPClassifier(max_iter=200, momentum=K, learning_rate="adaptive")
 
@@ -23,11 +24,24 @@ for K in np.linspace(0.1, 1, 11):
     pred = model.predict(testing_data)  #make prediction on test set
     error = sqrt(mean_squared_error(testing_targets, pred))  #calculate rmse
     rmse_val.append(error)  #store rmse values
-    print('RMSE value for k= ', K, 'is:', error)
+    grading_scheme_bins = [-1000.0, 60.0, 70.0, 80.0, 90.0, 500.0]
+    pred_letters = pd.cut(
+        pred,
+        grading_scheme_bins,
+        labels=False,
+        right=False,
+        include_lowest=True)
+    testing_letters = pd.cut(
+        testing_targets.values,
+        grading_scheme_bins,
+        labels=False,
+        right=False,
+        include_lowest=True)
+    acc_scores.append(accuracy_score(testing_letters, pred_letters) * 10)
 
 print("MIN RMSE Value: ", min(rmse_val))
-print("MAX Value: ", max(rmse_val))
-# plt.plot(rmse_val)
-# plt.xlabel("K")
-# plt.ylabel("RMSE")
-# plt.show()
+print("MAX Classification accuracy: ", max(acc_scores))
+plt.plot(rmse_val)
+plt.plot(acc_scores)
+plt.xlabel("K")
+plt.show()
