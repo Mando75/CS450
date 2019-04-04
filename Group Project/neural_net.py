@@ -4,27 +4,26 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import accuracy_score
 from math import sqrt
 from sklearn.neural_network import MLPRegressor
-import numpy as np
 import matplotlib
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
-data = load_data(use_means=False)
+data = load_data(use_means=True)
 
 rmse_val = []  #to store rmse values for different k
 acc_scores = []
-for K in range(20):
+for K in range(2):
     model = MLPRegressor(
         max_iter=2000,
         activation='logistic',
         solver='adam',
         learning_rate='adaptive',
     )
-    # model = MLPClassifier(max_iter=200, momentum=K, learning_rate="adaptive")
 
     training_data, testing_data, training_targets, testing_targets = tts(
         data["data"], data["targets"], test_size=.25, shuffle=True)
+    #
     model.fit(training_data, training_targets)  #fit the model
     pred = model.predict(testing_data)  #make prediction on test set
     error = sqrt(mean_squared_error(testing_targets, pred))  #calculate rmse
@@ -46,18 +45,24 @@ for K in range(20):
 
 print("MIN RMSE Value: ", min(rmse_val))
 print("MAX Classification accuracy: ", max(acc_scores))
-plt.plot(rmse_val)
-plt.plot(acc_scores)
-plt.xlabel("K")
-plt.show()
+# plt.plot(rmse_val)
+# plt.plot(acc_scores)
+# plt.xlabel("K")
+# plt.show()
 
 # Top Scores
-# RMSE: 10.78
-# Class: 76.49
 
-# RMSE: 10.5000 max_iter=500, activation='logistic'
+# RMSE: 8.6139
+# Class: 74.9
 
-# RMSE: 9.5184 max_iter=700, activation='logistic'
-# RMSE: 9.89 max_iter=1000, activation='logistic
+# RMSE: 8.254
+# Classification: 78.220
 
-# RMSE: 9.1403
+# RMSE: 8.0955
+# Classification: 78.3532
+
+# RMSE: 8.738
+# Classification: 78.884
+
+# RMSE: 9.300
+# Classification: 73.4395

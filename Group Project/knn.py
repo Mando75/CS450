@@ -16,7 +16,8 @@ rmse_val = []  #to store rmse values for different k
 acc_scores = []
 for K in range(20):
     K = K + 1
-    model = KNeighborsRegressor(n_neighbors=K)
+    model = KNeighborsRegressor(
+        n_neighbors=K, weights='uniform', algorithm='auto', p=0)
 
     training_data, testing_data, training_targets, testing_targets = tts(
         data["data"], data["targets"], test_size=.20, shuffle=True)
@@ -41,11 +42,15 @@ for K in range(20):
 
 print("MIN RMSE Value: ", min(rmse_val))
 print("MAX Classification accuracy: ", max(acc_scores))
-plt.plot(rmse_val)
-plt.plot(acc_scores)
-plt.xlabel("K")
-plt.show()
+# plt.plot(rmse_val)
+# plt.plot(acc_scores)
+# plt.xlabel("K")
+# plt.show()
 
 # Top Scores
 # RMSE: 13.23
 # Class: 67.28
+
+# Top Scores
+# RMSE: 13.14
+# Class: 73.08
