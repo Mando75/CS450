@@ -9,6 +9,8 @@ def load_data(use_means=True):
         data = impute_zero(data)
     data = drop_helper_columns(data)
     data = encode_courses(data)
+    data = one_hot_columns(data)
+    print(data.head())
     split = split_data_targets(data)
     return split
 
@@ -27,19 +29,24 @@ def impute_zero(data):
     return data
 
 
-def drop_helper_columns(data, columns=["teacherName"]):
+def drop_helper_columns(data, columns=["teacherName", "courseId"]):
     return data.drop(columns=columns)
 
 
 def encode_courses(data):
     columns = [
-        "currentGrade", "finalGrade", "userId", "courseCode", "courseId",
-        "teacherId"
+        "currentGrade",
+        "finalGrade",
+        "userId",
     ]
     for col in columns:
         data[col] = data[col].astype("category")
         data[col] = pd.factorize(data[col])[0] + 1
     return data
+
+
+def one_hot_columns(data):
+    return pd.get_dummies(data, columns=["teacherId", "courseCode"])
 
 
 def split_data_targets(data):

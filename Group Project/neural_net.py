@@ -15,7 +15,13 @@ data = load_data(use_means=False)
 rmse_val = []  #to store rmse values for different k
 acc_scores = []
 for K in range(20):
-    model = MLPRegressor(max_iter=500, learning_rate='adaptive')
+    model = MLPRegressor(
+        max_iter=2000,
+        activation='logistic',
+        solver='adam',
+        learning_rate='adaptive',
+        early_stopping=True,
+        shuffle=True)
     # model = MLPClassifier(max_iter=200, momentum=K, learning_rate="adaptive")
 
     training_data, testing_data, training_targets, testing_targets = tts(
@@ -37,7 +43,7 @@ for K in range(20):
         labels=False,
         right=False,
         include_lowest=True)
-    acc_scores.append(accuracy_score(testing_letters, pred_letters) * 10)
+    acc_scores.append(accuracy_score(testing_letters, pred_letters) * 100)
 
 print("MIN RMSE Value: ", min(rmse_val))
 print("MAX Classification accuracy: ", max(acc_scores))
@@ -45,3 +51,14 @@ plt.plot(rmse_val)
 plt.plot(acc_scores)
 plt.xlabel("K")
 plt.show()
+
+# Top Scores
+# RMSE: 10.78
+# Class: 76.49
+
+# RMSE: 10.5000 max_iter=500, activation='logistic'
+
+# RMSE: 9.5184 max_iter=700, activation='logistic'
+# RMSE: 9.89 max_iter=1000, activation='logistic
+
+# RMSE: 9.1403

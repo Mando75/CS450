@@ -37,7 +37,7 @@ for K in range(20):
         labels=False,
         right=False,
         include_lowest=True)
-    acc_scores.append(accuracy_score(testing_letters, pred_letters) * 10)
+    acc_scores.append(accuracy_score(testing_letters, pred_letters) * 100)
 
 print("MIN RMSE Value: ", min(rmse_val))
 print("MAX Classification accuracy: ", max(acc_scores))
@@ -45,3 +45,7 @@ plt.plot(rmse_val)
 plt.plot(acc_scores)
 plt.xlabel("K")
 plt.show()
+
+# Top Scores
+# RMSE: 13.23
+# Class: 67.28
