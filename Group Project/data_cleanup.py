@@ -10,7 +10,6 @@ def load_data(use_means=True):
     data = drop_helper_columns(data)
     data = encode_courses(data)
     data = one_hot_columns(data)
-    print(data.head())
     split = split_data_targets(data)
     return split
 

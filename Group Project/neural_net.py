@@ -20,8 +20,7 @@ for K in range(20):
         activation='logistic',
         solver='adam',
         learning_rate='adaptive',
-        early_stopping=True,
-        shuffle=True)
+    )
     # model = MLPClassifier(max_iter=200, momentum=K, learning_rate="adaptive")
 
     training_data, testing_data, training_targets, testing_targets = tts(
